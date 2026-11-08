@@ -8,8 +8,7 @@
     "start": "next start",
     "type-check": "tsc --noEmit",
     "lint": "biome lint",
-    "format": "biome format",
-    "gen:forem": "openapi-typescript-codegen -i https://developers.forem.com/redocusaurus/plugin-redoc-1.yaml -o services/forem"
+    "format": "biome format"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",

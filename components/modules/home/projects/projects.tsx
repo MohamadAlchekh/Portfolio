@@ -23,6 +23,23 @@ export type ProjectConfig = {
 };
 
 const projects: Record<string, ProjectConfig> = {
+  "l-timer": {
+    image: "/images/projects/l-timer/L-timer.png",
+    images: [
+      "/images/projects/l-timer/slider/L-timer.png",
+      "/images/projects/l-timer/slider/Screenshot 2026-10-11 150242.png",
+      "/images/projects/l-timer/slider/Screenshot 2026-10-15 133344.png",
+      "/images/projects/l-timer/slider/Screenshot 2026-10-23 012037.png",
+      "/images/projects/l-timer/slider/Screenshot 2026-10-23 012108.png",
+    ],
+    tags: ["Laravel", "MySQL", "Alpine.js", "Tailwind CSS"],
+    customTitle: "L-Timer",
+    customTagline: "Psychometric assessments for project-management students, built for a professor in Poland.",
+    liveDemoUrl: "https://l-timer.com",
+    liveDemoButtonText: "Visit Live Site",
+    noGithub: true,
+    hasLevel3: false,
+  },
   "ozbag-production-api": {
     image: "/images/projects/Ozbag Production API/main.png",
     tags: ["Laravel", "MSSQL"],
@@ -58,6 +75,21 @@ const projects: Record<string, ProjectConfig> = {
     badge: "1st place",
     hasLevel3: true,
   },
+  "HilalAi": {
+    owner: "MohamadAlchekh",
+    image: "/images/projects/Hilal AI/Blue and White Simple Illustrated Background Plaid Wraparound Mug.png",
+    images: [
+      "/images/projects/Hilal AI/slider/1.png",
+      "/images/projects/Hilal AI/slider/1743551024011.jpeg",
+      "/images/projects/Hilal AI/slider/1743551024846.jpeg",
+      "/images/projects/Hilal AI/slider/1743551024892.jpeg",
+      "/images/projects/Hilal AI/slider/1743551024945.jpeg"
+    ],
+    tags: ["JavaScript", "PHP", "Laravel"],
+    customTitle: "HilalAI",
+    customTagline: "AI study assistant that turns notes into summaries and quizzes",
+    hasLevel3: false,
+  },
   hassil: {
     owner: "MohamadAlchekh",
     image: "/images/projects/Hassil/salamhack.Alchekh.png",
@@ -66,23 +98,6 @@ const projects: Record<string, ProjectConfig> = {
     customTitle: "Hassil",
     customTagline: "Turns invoices into cash within hours",
     badge: "7th/132",
-    hasLevel3: true,
-  },
-  "l-timer": {
-    image: "/images/projects/l-timer/L-timer.png",
-    images: [
-      "/images/projects/l-timer/slider/L-timer.png",
-      "/images/projects/l-timer/slider/Screenshot 2026-10-11 150242.png",
-      "/images/projects/l-timer/slider/Screenshot 2026-10-15 133344.png",
-      "/images/projects/l-timer/slider/Screenshot 2026-10-23 012037.png",
-      "/images/projects/l-timer/slider/Screenshot 2026-10-23 012108.png",
-    ],
-    tags: ["Laravel", "MySQL", "Alpine.js", "Tailwind CSS"],
-    customTitle: "L-Timer",
-    customTagline: "Psychometric assessments for project-management students, built for a professor in Poland.",
-    liveDemoUrl: "https://l-timer.com",
-    liveDemoButtonText: "Visit Live Site",
-    noGithub: true,
     hasLevel3: false,
   },
   "document-management-system-": { 
@@ -103,21 +118,6 @@ const projects: Record<string, ProjectConfig> = {
     customTitle: "Document Management System",
     customTagline: "Desktop app for tracking university document archives",
     badge: "1st in class",
-    hasLevel3: false,
-  },
-  "HilalAi": {
-    owner: "MohamadAlchekh",
-    image: "/images/projects/Hilal AI/Blue and White Simple Illustrated Background Plaid Wraparound Mug.png",
-    images: [
-      "/images/projects/Hilal AI/slider/1.png",
-      "/images/projects/Hilal AI/slider/1743551024011.jpeg",
-      "/images/projects/Hilal AI/slider/1743551024846.jpeg",
-      "/images/projects/Hilal AI/slider/1743551024892.jpeg",
-      "/images/projects/Hilal AI/slider/1743551024945.jpeg"
-    ],
-    tags: ["JavaScript", "PHP", "Laravel"],
-    customTitle: "HilalAI",
-    customTagline: "AI study assistant that turns notes into summaries and quizzes",
     hasLevel3: false,
   },
   Kampus_Yanimda: {
@@ -147,13 +147,27 @@ const ProjectsModule = async () => {
           config,
         };
       }
-      return {
-        project: await octokit.rest.repos.get({
-          owner: config.owner || "MohamadAlchekh",
-          repo: project,
-        }),
-        config,
-      };
+      try {
+        return {
+          project: await octokit.rest.repos.get({
+            owner: config.owner || "MohamadAlchekh",
+            repo: project,
+          }),
+          config,
+        };
+      } catch (error) {
+        return {
+          project: {
+            data: {
+              id: project as any,
+              name: config.customTitle || project,
+              description: config.customTagline || "",
+              html_url: `https://github.com/${config.owner || "MohamadAlchekh"}/${project}`,
+            } as any,
+          },
+          config,
+        };
+      }
     }),
   );
 
